@@ -31,4 +31,21 @@ public class OnlineGame extends Game {
         super.print();
         System.out.println("Download Link: " + downloadLink);
     }
+
+    // Rentable methods (inherited from Game)
+    @Override
+    public void rent() {
+        if (isAvailable) {
+            isAvailable = false;
+            System.out.println("Online game rented: " + title);
+        } else {
+            System.out.println("Online game is not available: " + title);
+        }
+    }
+
+    @Override
+    public void returnItem() {
+        isAvailable = true;
+        System.out.println("Online game returned: " + title);
+    }
 }

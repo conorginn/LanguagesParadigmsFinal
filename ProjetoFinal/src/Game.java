@@ -1,6 +1,6 @@
 // Game SubClass
 
-public class Game extends Item {
+public class Game extends Item implements Rentable {
     private String developer;
     private String platform;
 
@@ -48,4 +48,22 @@ public class Game extends Item {
         super.print();
         System.out.println("developer: " + developer + "platform: " + platform);
     }
+
+    // Rentable methods
+    @Override
+    public void rent() {
+        if (isAvailable) {
+            isAvailable = false;
+            System.out.println("Game rented: " + title);
+        } else {
+            System.out.println("Game is not available: " + title);
+        }
+    }
+
+    @Override
+    public void returnItem() {
+        isAvailable = true;
+        System.out.println("Game returned: " + title);
+    }
+
 }
