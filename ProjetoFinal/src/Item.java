@@ -45,7 +45,23 @@ public abstract class Item {
         this.isAvailable = isAvailable;
     }
 
-    // Overridden methods TODO
+    // Abstract Clone method to be implemented by subclasses
+    public abstract Item clone();
+
+
+    // Override Methods
+    @Override
+    public String toString() {
+        return "ID: " + id + ", Title: " + title + ", Available: " + isAvailable;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Item item = (Item) obj;
+        return id == item.id && isAvailable == item.isAvailable && title.equals(item.title);
+    }
 
 
     // Print method

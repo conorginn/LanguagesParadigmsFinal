@@ -25,11 +25,16 @@ public class OnlineGame extends Game {
     public String getDownloadLink() { return downloadLink; }
     public void setDownloadLink(String downloadLink) { this.downloadLink = downloadLink; }
 
-    // Overridden print method
+    // Override Methods
     @Override
     public void print() {
         super.print();
         System.out.println("Download Link: " + downloadLink);
+    }
+
+    @Override
+    public OnlineGame clone() {
+        return new OnlineGame(this);
     }
 
     // Rentable methods (inherited from Game)

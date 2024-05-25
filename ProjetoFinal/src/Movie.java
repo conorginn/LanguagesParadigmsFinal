@@ -32,11 +32,16 @@ public class Movie extends Item implements Rentable {
     public String getGenre() { return genre; }
     public void setGenre(String genre) { this.genre = genre; }
 
-    // Overridden print method
+    // Override Methods
     @Override
     public void print() {
         super.print();
         System.out.println("Director: " + director + ", Genre: " + genre);
+    }
+
+    @Override
+    public Movie clone() {
+        return new Movie(this);
     }
 
     // Rentable methods

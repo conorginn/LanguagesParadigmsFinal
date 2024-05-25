@@ -42,11 +42,16 @@ public class Game extends Item implements Rentable {
         this.platform = platform;
     }
 
-    // Overridden print method
+    // Override Methods
     @Override
     public void print() {
         super.print();
-        System.out.println("developer: " + developer + "platform: " + platform);
+        System.out.println("Developer: " + developer + ", Platform: " + platform);
+    }
+
+    @Override
+    public Game clone() {
+        return new Game(this);
     }
 
     // Rentable methods
