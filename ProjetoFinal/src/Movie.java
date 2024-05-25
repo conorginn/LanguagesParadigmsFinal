@@ -1,5 +1,8 @@
-// Movie SubClass
+// Programming Languages and Paradigms - Final Project
+// Matthew Riddell 2023107667
+// Conor McGinn 2023107678
 
+// Movie SubClass
 public class Movie extends Item implements Rentable {
     private String director;
     private String genre;
