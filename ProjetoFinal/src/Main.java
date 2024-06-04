@@ -4,8 +4,6 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 // Main Class
@@ -43,7 +41,7 @@ public class Main {
         // Inventory Menu
         JMenu inventoryMenu = new JMenu("Inventory");
         JMenuItem viewInventory = new JMenuItem("View Inventory");
-        viewInventory.addActionListener(e -> store.printInventory());
+        viewInventory.addActionListener(e -> viewInventoryDialog());
         inventoryMenu.add(viewInventory);
 
         JMenuItem addItem = new JMenuItem("Add Item");
@@ -55,7 +53,7 @@ public class Main {
         // Customer Menu
         JMenu customerMenu = new JMenu("Customers");
         JMenuItem viewCustomers = new JMenuItem("View Customers");
-        viewCustomers.addActionListener(e -> store.printCustomers());
+        viewCustomers.addActionListener(e -> viewCustomersDialog());
         customerMenu.add(viewCustomers);
 
         JMenuItem registerCustomer = new JMenuItem("Register Customer");
@@ -78,6 +76,28 @@ public class Main {
 
         frame.setJMenuBar(menuBar);
         frame.setVisible(true);
+    }
+
+    private static void viewInventoryDialog() {
+        JTextArea inventoryArea = new JTextArea(15, 30);
+        inventoryArea.setEditable(false);
+        StringBuilder inventoryText = new StringBuilder();
+        for (Item item : store.getItems()) {
+            inventoryText.append(item).append("\n");
+        }
+        inventoryArea.setText(inventoryText.toString());
+        JOptionPane.showMessageDialog(null, new JScrollPane(inventoryArea), "Inventory", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private static void viewCustomersDialog() {
+        JTextArea customersArea = new JTextArea(15, 30);
+        customersArea.setEditable(false);
+        StringBuilder customersText = new StringBuilder();
+        for (Customer customer : store.getCustomers()) {
+            customersText.append(customer).append("\n");
+        }
+        customersArea.setText(customersText.toString());
+        JOptionPane.showMessageDialog(null, new JScrollPane(customersArea), "Customers", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private static void addItemDialog() {
