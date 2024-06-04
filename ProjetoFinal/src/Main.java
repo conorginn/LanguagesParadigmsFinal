@@ -2,12 +2,17 @@
 // Matthew Riddell 2023107667
 // Conor McGinn 2023107678
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 // Main Class
 public class Main {
-    public static void main(String[] args) {
-        // Create RentalStore
-        RentalStore store = new RentalStore("Matt's Rental Store");
+    private static RentalStore store = new RentalStore("Matt's Rental Store");
 
+    public static void main(String[] args) {
         // Create Store Items
         Game game = new Game("The Witcher 3", "CD Projekt Red", "PC");
         OnlineGame onlineGame = new OnlineGame("Fortnite", "Epic Games", "PC", "https://download.fortnite.com");
@@ -24,27 +29,166 @@ public class Main {
         // Register the customer
         store.registerCustomer(customer);
 
-        // Print inventory and customers
-        store.printInventory();
-        store.printCustomers();
+        // Create and display the GUI
+        SwingUtilities.invokeLater(Main::createAndShowGUI);
+    }
 
-        // Rent an item to the customer
-        store.rentItemToCustomer(game, customer);
+    private static void createAndShowGUI() {
+        JFrame frame = new JFrame("Rental Store Management");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 400);
 
-        // Print inventory and customers after renting
-        store.printInventory();
-        store.printCustomers();
+        JMenuBar menuBar = new JMenuBar();
 
-        // Return an item from the customer
-        store.returnItemFromCustomer(game, customer);
+        // Inventory Menu
+        JMenu inventoryMenu = new JMenu("Inventory");
+        JMenuItem viewInventory = new JMenuItem("View Inventory");
+        viewInventory.addActionListener(e -> store.printInventory());
+        inventoryMenu.add(viewInventory);
 
-        // Print inventory and customers after returning
-        store.printInventory();
-        store.printCustomers();
+        JMenuItem addItem = new JMenuItem("Add Item");
+        addItem.addActionListener(e -> addItemDialog());
+        inventoryMenu.add(addItem);
 
-        // Test cloning
-        Game clonedGame = game.clone();
-        System.out.println("Cloned Game:");
-        clonedGame.print();
+        menuBar.add(inventoryMenu);
+
+        // Customer Menu
+        JMenu customerMenu = new JMenu("Customers");
+        JMenuItem viewCustomers = new JMenuItem("View Customers");
+        viewCustomers.addActionListener(e -> store.printCustomers());
+        customerMenu.add(viewCustomers);
+
+        JMenuItem registerCustomer = new JMenuItem("Register Customer");
+        registerCustomer.addActionListener(e -> registerCustomerDialog());
+        customerMenu.add(registerCustomer);
+
+        menuBar.add(customerMenu);
+
+        // Rental Menu
+        JMenu rentalMenu = new JMenu("Rentals");
+        JMenuItem rentItem = new JMenuItem("Rent Item");
+        rentItem.addActionListener(e -> rentItemDialog());
+        rentalMenu.add(rentItem);
+
+        JMenuItem returnItem = new JMenuItem("Return Item");
+        returnItem.addActionListener(e -> returnItemDialog());
+        rentalMenu.add(returnItem);
+
+        menuBar.add(rentalMenu);
+
+        frame.setJMenuBar(menuBar);
+        frame.setVisible(true);
+    }
+
+    private static void addItemDialog() {
+        // Simple dialog for adding items
+        String[] itemTypes = {"Game", "OnlineGame", "Movie"};
+        JComboBox<String> itemTypeCombo = new JComboBox<>(itemTypes);
+        JTextField titleField = new JTextField(10);
+        JTextField developerField = new JTextField(10);
+        JTextField platformField = new JTextField(10);
+        JTextField directorField = new JTextField(10);
+        JTextField genreField = new JTextField(10);
+        JTextField downloadLinkField = new JTextField(10);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(0, 2));
+        panel.add(new JLabel("Item Type:"));
+        panel.add(itemTypeCombo);
+        panel.add(new JLabel("Title:"));
+        panel.add(titleField);
+        panel.add(new JLabel("Developer:"));
+        panel.add(developerField);
+        panel.add(new JLabel("Platform:"));
+        panel.add(platformField);
+        panel.add(new JLabel("Director:"));
+        panel.add(directorField);
+        panel.add(new JLabel("Genre:"));
+        panel.add(genreField);
+        panel.add(new JLabel("Download Link:"));
+        panel.add(downloadLinkField);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Add Item", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            String itemType = (String) itemTypeCombo.getSelectedItem();
+            String title = titleField.getText();
+            if ("Game".equals(itemType)) {
+                String developer = developerField.getText();
+                String platform = platformField.getText();
+                store.addItem(new Game(title, developer, platform));
+            } else if ("OnlineGame".equals(itemType)) {
+                String developer = developerField.getText();
+                String platform = platformField.getText();
+                String downloadLink = downloadLinkField.getText();
+                store.addItem(new OnlineGame(title, developer, platform, downloadLink));
+            } else if ("Movie".equals(itemType)) {
+                String director = directorField.getText();
+                String genre = genreField.getText();
+                store.addItem(new Movie(title, director, genre));
+            }
+        }
+    }
+
+    private static void registerCustomerDialog() {
+        JTextField nameField = new JTextField(10);
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Customer Name:"));
+        panel.add(nameField);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Register Customer", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            String name = nameField.getText();
+            store.registerCustomer(new Customer(name));
+        }
+    }
+
+    private static void rentItemDialog() {
+        JTextField customerIdField = new JTextField(10);
+        JTextField itemIdField = new JTextField(10);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(0, 2));
+        panel.add(new JLabel("Customer ID:"));
+        panel.add(customerIdField);
+        panel.add(new JLabel("Item ID:"));
+        panel.add(itemIdField);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Rent Item", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            int customerId = Integer.parseInt(customerIdField.getText());
+            int itemId = Integer.parseInt(itemIdField.getText());
+            Customer customer = store.getCustomers().stream().filter(c -> c.getCustomerId() == customerId).findFirst().orElse(null);
+            Item item = store.getItems().stream().filter(i -> i.getId() == itemId).findFirst().orElse(null);
+            if (customer != null && item != null) {
+                store.rentItemToCustomer(item, customer);
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid Customer ID or Item ID", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private static void returnItemDialog() {
+        JTextField customerIdField = new JTextField(10);
+        JTextField itemIdField = new JTextField(10);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(0, 2));
+        panel.add(new JLabel("Customer ID:"));
+        panel.add(customerIdField);
+        panel.add(new JLabel("Item ID:"));
+        panel.add(itemIdField);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Return Item", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            int customerId = Integer.parseInt(customerIdField.getText());
+            int itemId = Integer.parseInt(itemIdField.getText());
+            Customer customer = store.getCustomers().stream().filter(c -> c.getCustomerId() == customerId).findFirst().orElse(null);
+            Item item = store.getItems().stream().filter(i -> i.getId() == itemId).findFirst().orElse(null);
+            if (customer != null && item != null) {
+                store.returnItemFromCustomer(item, customer);
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid Customer ID or Item ID", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 }
