@@ -4,7 +4,6 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Main {
     private static RentalStore store = new RentalStore("Matt's Rental Store");
@@ -77,34 +76,40 @@ public class Main {
         frame.setJMenuBar(menuBar);
 
         // Panel for buttons
-        JPanel buttonPanel = new JPanel(new GridLayout(3, 2, 10, 10)); // Grid layout with spacing
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around the panel
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding
 
+        // View Inventory Button
         JButton viewInventoryButton = new JButton("View Inventory");
         viewInventoryButton.setFont(new Font("Arial", Font.PLAIN, 20));
         viewInventoryButton.addActionListener(e -> viewInventoryDialog());
         buttonPanel.add(viewInventoryButton);
 
+        // Add Item Button
         JButton addItemButton = new JButton("Add Item");
         addItemButton.setFont(new Font("Arial", Font.PLAIN, 20));
         addItemButton.addActionListener(e -> addItemDialog());
         buttonPanel.add(addItemButton);
 
+        // View Customers Button
         JButton viewCustomersButton = new JButton("View Customers");
         viewCustomersButton.setFont(new Font("Arial", Font.PLAIN, 20));
         viewCustomersButton.addActionListener(e -> viewCustomersDialog());
         buttonPanel.add(viewCustomersButton);
 
+        // Register Customer Button
         JButton registerCustomerButton = new JButton("Register Customer");
         registerCustomerButton.setFont(new Font("Arial", Font.PLAIN, 20));
         registerCustomerButton.addActionListener(e -> registerCustomerDialog());
         buttonPanel.add(registerCustomerButton);
 
+        // Rent Item Button
         JButton rentItemButton = new JButton("Rent Item");
         rentItemButton.setFont(new Font("Arial", Font.PLAIN, 20));
         rentItemButton.addActionListener(e -> rentItemDialog());
         buttonPanel.add(rentItemButton);
 
+        // Return Item Button
         JButton returnItemButton = new JButton("Return Item");
         returnItemButton.setFont(new Font("Arial", Font.PLAIN, 20));
         returnItemButton.addActionListener(e -> returnItemDialog());
@@ -116,6 +121,7 @@ public class Main {
     }
 
     private static void viewInventoryDialog() {
+        // Display the inventory in a scrollable text area
         JTextArea inventoryArea = new JTextArea(15, 30);
         inventoryArea.setEditable(false);
         StringBuilder inventoryText = new StringBuilder();
@@ -127,6 +133,7 @@ public class Main {
     }
 
     private static void viewCustomersDialog() {
+        // Display the list of customers in a scrollable text area
         JTextArea customersArea = new JTextArea(15, 30);
         customersArea.setEditable(false);
         StringBuilder customersText = new StringBuilder();
@@ -138,7 +145,6 @@ public class Main {
     }
 
     private static void addItemDialog() {
-        // Simple dialog for adding items
         String[] itemTypes = {"Game", "OnlineGame", "Movie"};
         JComboBox<String> itemTypeCombo = new JComboBox<>(itemTypes);
         JTextField titleField = new JTextField(10);
@@ -148,6 +154,7 @@ public class Main {
         JTextField genreField = new JTextField(10);
         JTextField downloadLinkField = new JTextField(10);
 
+        // Panel for the add item dialog
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 2, 10, 10)); // Spacing between elements
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Added padding
@@ -166,8 +173,10 @@ public class Main {
         panel.add(new JLabel("Download Link:"));
         panel.add(downloadLinkField);
 
+        // Show the add item dialog
         int result = JOptionPane.showConfirmDialog(null, panel, "Add Item", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
+            // Add the item based on the selected type
             String itemType = (String) itemTypeCombo.getSelectedItem();
             String title = titleField.getText();
             if ("Game".equals(itemType)) {
@@ -188,6 +197,7 @@ public class Main {
     }
 
     private static void registerCustomerDialog() {
+        // Registering a new customer
         JTextField nameField = new JTextField(10);
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 2, 10, 10));
@@ -195,14 +205,17 @@ public class Main {
         panel.add(new JLabel("Customer Name:"));
         panel.add(nameField);
 
+        // Show the register customer dialog
         int result = JOptionPane.showConfirmDialog(null, panel, "Register Customer", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
+            // Register the new customer
             String name = nameField.getText();
             store.registerCustomer(new Customer(name));
         }
     }
 
     private static void rentItemDialog() {
+        // Renting an item to a customer
         JTextField customerIdField = new JTextField(10);
         JTextField itemIdField = new JTextField(10);
 
@@ -214,8 +227,10 @@ public class Main {
         panel.add(new JLabel("Item ID:"));
         panel.add(itemIdField);
 
+        // Show the rent item
         int result = JOptionPane.showConfirmDialog(null, panel, "Rent Item", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
+            // Rent the item to the customer if valid IDs are provided
             int customerId = Integer.parseInt(customerIdField.getText());
             int itemId = Integer.parseInt(itemIdField.getText());
             Customer customer = store.getCustomers().stream().filter(c -> c.getCustomerId() == customerId).findFirst().orElse(null);
@@ -229,6 +244,7 @@ public class Main {
     }
 
     private static void returnItemDialog() {
+        // Returning a rented item
         JTextField customerIdField = new JTextField(10);
         JTextField itemIdField = new JTextField(10);
 
@@ -240,8 +256,10 @@ public class Main {
         panel.add(new JLabel("Item ID:"));
         panel.add(itemIdField);
 
+        // Show the return item
         int result = JOptionPane.showConfirmDialog(null, panel, "Return Item", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
+            // Return the item if valid IDs are provided
             int customerId = Integer.parseInt(customerIdField.getText());
             int itemId = Integer.parseInt(itemIdField.getText());
             Customer customer = store.getCustomers().stream().filter(c -> c.getCustomerId() == customerId).findFirst().orElse(null);
