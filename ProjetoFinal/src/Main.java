@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-// Main Class
 public class Main {
     private static RentalStore store = new RentalStore("Matt's Rental Store");
 
@@ -34,7 +33,8 @@ public class Main {
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Rental Store Management");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
+        frame.setSize(800, 600); // Increased size for better appearance
+        frame.setLayout(new BorderLayout());
 
         JMenuBar menuBar = new JMenuBar();
 
@@ -75,6 +75,43 @@ public class Main {
         menuBar.add(rentalMenu);
 
         frame.setJMenuBar(menuBar);
+
+        // Panel for buttons
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 2, 10, 10)); // Grid layout with spacing
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around the panel
+
+        JButton viewInventoryButton = new JButton("View Inventory");
+        viewInventoryButton.setFont(new Font("Arial", Font.PLAIN, 20));
+        viewInventoryButton.addActionListener(e -> viewInventoryDialog());
+        buttonPanel.add(viewInventoryButton);
+
+        JButton addItemButton = new JButton("Add Item");
+        addItemButton.setFont(new Font("Arial", Font.PLAIN, 20));
+        addItemButton.addActionListener(e -> addItemDialog());
+        buttonPanel.add(addItemButton);
+
+        JButton viewCustomersButton = new JButton("View Customers");
+        viewCustomersButton.setFont(new Font("Arial", Font.PLAIN, 20));
+        viewCustomersButton.addActionListener(e -> viewCustomersDialog());
+        buttonPanel.add(viewCustomersButton);
+
+        JButton registerCustomerButton = new JButton("Register Customer");
+        registerCustomerButton.setFont(new Font("Arial", Font.PLAIN, 20));
+        registerCustomerButton.addActionListener(e -> registerCustomerDialog());
+        buttonPanel.add(registerCustomerButton);
+
+        JButton rentItemButton = new JButton("Rent Item");
+        rentItemButton.setFont(new Font("Arial", Font.PLAIN, 20));
+        rentItemButton.addActionListener(e -> rentItemDialog());
+        buttonPanel.add(rentItemButton);
+
+        JButton returnItemButton = new JButton("Return Item");
+        returnItemButton.setFont(new Font("Arial", Font.PLAIN, 20));
+        returnItemButton.addActionListener(e -> returnItemDialog());
+        buttonPanel.add(returnItemButton);
+
+        frame.add(buttonPanel, BorderLayout.CENTER);
+
         frame.setVisible(true);
     }
 
@@ -112,7 +149,8 @@ public class Main {
         JTextField downloadLinkField = new JTextField(10);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(0, 2));
+        panel.setLayout(new GridLayout(0, 2, 10, 10)); // Spacing between elements
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Added padding
         panel.add(new JLabel("Item Type:"));
         panel.add(itemTypeCombo);
         panel.add(new JLabel("Title:"));
@@ -152,6 +190,8 @@ public class Main {
     private static void registerCustomerDialog() {
         JTextField nameField = new JTextField(10);
         JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(0, 2, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Added padding
         panel.add(new JLabel("Customer Name:"));
         panel.add(nameField);
 
@@ -167,7 +207,8 @@ public class Main {
         JTextField itemIdField = new JTextField(10);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(0, 2));
+        panel.setLayout(new GridLayout(0, 2, 10, 10)); // Added spacing between elements
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Added padding
         panel.add(new JLabel("Customer ID:"));
         panel.add(customerIdField);
         panel.add(new JLabel("Item ID:"));
@@ -192,7 +233,8 @@ public class Main {
         JTextField itemIdField = new JTextField(10);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(0, 2));
+        panel.setLayout(new GridLayout(0, 2, 10, 10)); // Added spacing between elements
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Added padding
         panel.add(new JLabel("Customer ID:"));
         panel.add(customerIdField);
         panel.add(new JLabel("Item ID:"));
