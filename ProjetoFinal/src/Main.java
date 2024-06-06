@@ -1,6 +1,7 @@
 // Programming Languages and Paradigms - Final Project
 // Matthew Riddell 2023107667
 // Conor McGinn 2023107678
+// https://github.com/xconor/LanguagesParadigmsFinal
 
 import javax.swing.*;
 import java.awt.*;
